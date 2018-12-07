@@ -1,5 +1,3 @@
-# Slack for Franz
-This is the official Franz recipe for Slack
+# Symphony for Franz
 
-### How to create your own Franz recipes:
-* [Read the documentation](https://github.com/meetfranz/plugins)
+Integrates the [Symphony Secure Messenger](https://symphony.com/) as a service.
