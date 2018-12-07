@@ -2,7 +2,7 @@
   "id": "symphony",
   "name": "Symphony",
   "version": "1.0.0",
-  "description": "Slack",
+  "description": "Symphony Secure Messenger",
   "main": "index.js",
   "author": "austin ce <austin.cawley@gmail.com>",
   "license": "MIT",
