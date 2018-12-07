@@ -1,54 +1,29 @@
-import { ipcRenderer } from 'electron';
 import path from 'path';
 
-const getTeamIcon = function getTeamIcon(count = 0) {
-  let countTeamIconCheck = count;
-  let bgUrl = null;
+console.log('symphony recipe loaded');
 
-  const teamMenu = document.querySelector('#team_menu');
-  if (teamMenu) {
-    teamMenu.click();
+const SELECTOR_BADGE_COUNT = '#conversations .navigation-item .navigation-badge-count';
 
-    const icon = document.querySelector('.team_icon');
-    if (icon) {
-      bgUrl = window.getComputedStyle(icon, null).getPropertyValue('background-image');
-      bgUrl = /^url\((['"]?)(.*)\1\)$/.exec(bgUrl);
-      bgUrl = bgUrl ? bgUrl[2] : '';
+function getMessages() {
+  const directMessages = document.querySelectorAll(SELECTOR_BADGE_COUNT);
+  console.log('symphony messsages', directMessages);
+  return directMessages.reduce((totalCount, elem) => {
+    const numMessages = Number(elem.innerText);
+    if (Number.isNaN(numMessages)) {
+      return totalCount;
     }
+    return totalCount + numMessages;
+  }, 0);
+}
 
-    setTimeout(() => {
-      document.querySelector('.team_menu').remove();
-      document.querySelector('#msg_input .ql-editor').focus();
-    }, 10);
-  }
-
-  countTeamIconCheck += 1;
-
-  if (bgUrl) {
-    ipcRenderer.sendToHost('avatar', bgUrl);
-  } else if (countTeamIconCheck <= 5) {
-    setTimeout(() => {
-      getTeamIcon(countTeamIconCheck + 1);
-    }, 2000);
-  }
-};
-
-const SELECTOR_CHANNELS_UNREAD = '.p-channel_sidebar__channel--unread:not(.p-channel_sidebar__channel--muted)';
 
 module.exports = (Franz) => {
-  const getMessages = () => {
-    const directMessages = document.querySelectorAll(`${SELECTOR_CHANNELS_UNREAD} .p-channel_sidebar__badge`).length;
-    const allMessages = document.querySelectorAll(SELECTOR_CHANNELS_UNREAD).length - directMessages;
+  console.log('Franz loaded', Franz);
+  Franz.loop(() => {
+    console.log('Getting Symphony messages');
+    const messages = getMessages();
+    Franz.setBadge(messages);
+  });
 
-    // set Franz badge
-    Franz.setBadge(directMessages, allMessages);
-  };
-  Franz.loop(getMessages);
-
-  setTimeout(() => {
-    getTeamIcon();
-  }, 4000);
-
-  // inject franz.css stylesheet
   Franz.injectCSS(path.join(__dirname, 'service.css'));
 };

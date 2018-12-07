@@ -1,17 +1,16 @@
 {
-  "id": "slack",
-  "name": "Slack",
-  "version": "1.0.8",
+  "id": "symphony",
+  "name": "Symphony",
+  "version": "1.0.0",
   "description": "Slack",
   "main": "index.js",
-  "author": "Stefan Malzner <stefan@adlk.io>",
+  "author": "austin ce <austin.cawley@gmail.com>",
   "license": "MIT",
   "config": {
-    "serviceURL": "https://{teamId}.slack.com",
+    "serviceURL": "https://{teamId}.symphony.com",
     "hasNotificationSound": true,
     "hasDirectMessages": true,
-    "hasIndirectMessages": true,
     "hasTeamId": true,
-    "urlInputSuffix": ".slack.com"
+    "urlInputSuffix": ".symphony.com"
   }
 }
