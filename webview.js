@@ -2,11 +2,16 @@ const path = require('path');
 
 const SELECTOR_BADGE_COUNT = '#conversations .navigation-item .navigation-badge-count';
 
-function getMessages() {
+const INVALID_MESSAGE_CHAR_REGEX = /[+]/g;
+
+function getNumberOfMessages() {
   const directMessages = document.querySelectorAll(SELECTOR_BADGE_COUNT);
   return Array.from(directMessages)
     .reduce((totalCount, elem) => {
-      const numMessages = Number(elem.innerText);
+      const badgeText = elem.innerText;
+      // in range 1...50+
+      const cleanedBadgeText = badgeText.replace(INVALID_MESSAGE_CHAR_REGEX, '');
+      const numMessages = Number(cleanedBadgeText);
       if (Number.isNaN(numMessages)) {
         return totalCount;
       }
@@ -17,7 +22,7 @@ function getMessages() {
 
 module.exports = (Franz) => {
   Franz.loop(() => {
-    const messages = getMessages();
+    const messages = getNumberOfMessages();
     Franz.setBadge(messages);
   });
 
